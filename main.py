@@ -33,7 +33,6 @@ class EnhancedLibrarySystem:
         if book.category not in self.books_by_category:
             self.books_by_category[book.category] = []
         self.books_by_category[book.category].append(book.unique_code)
-        print(self.books_by_category)
 
     def _index_by_title_substrings(self, book):
         '''Indexes a book by its title substrings.'''

@@ -56,19 +56,26 @@ class EnhancedLibrarySystem:
 
     def search_books(self, category=None, title=None, author_last_name=None):
         '''Searches for books based on the given category, title, and/or author last name.'''
-        results = set()
+        category_results = set()
+        title_results = set()
+        author_results = set()
 
         if category:
             category = category.upper()
-            results.update(self._search_books_by_category(category))
+            category_results.update(self._search_books_by_category(category))
 
         if title:
             title = title.lower()
-            results.update(self._search_books_by_title(title))
+            title_results.update(self._search_books_by_title(title))
 
         if author_last_name:
             author_last_name = author_last_name.lower()
-            results.update(self._search_books_by_author(author_last_name))
+            author_results.update(self._search_books_by_author(author_last_name))
+
+        # intersection of all results
+        list_of_sets = [category_results, title_results, author_results]
+        non_empties = [x for x in list_of_sets if x]
+        results = set.intersection(*non_empties) if non_empties else set()
 
         return [(self.books_by_code[code].title, code) for code in results]
 

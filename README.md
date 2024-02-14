@@ -31,59 +31,41 @@ Your code shall be able to allow users to add books and search books.
 
 ```mermaid
 classDiagram
-    class WashType {
-        - name: str
-        - duration: int
-        - cost: int
-        + __init__(name: str, duration: int, cost: int)
+    class Book {
+        - title: str
+        - author_last_name: str
+        - category: str
+        - unique_code: str
+        + __init__(title: str, author_last_name: str, category: str)
     }
 
-    class Coin {
-        - value: int
-        + ACCEPTED_VALUES: int[]
-        + __init__(value: int)
-    }
-
-    class WashingMachine {
-        - coins_credited: dict(str: int)
-        - coins_earned: dict(str: int)
-        - total_credited: int
-        - current_wash_type: WashType
-        - total_earned: int
-        - is_locked: boolean
-        - total_time_on: int
-        - wash_types: dict(str: WashType)
+    class EnhancedLibrarySystem {
+        - books_by_code: dict(str: Book)
+        - books_by_category: dict(str: list(str))
+        - books_by_title: dict(str: list(str))
+        - books_by_author: dict(str: list(str))
         + __init__()
-        + calculate_total_credited(): void
-        + calculate_total_earned(): void
-        + accept_coin(coin: Coin): void
-        + select_wash_type(wash_type: str): boolean
-        + start_wash(): void
-        + refund(): void
-        + display_statistics(): void
-        + reset_statistics(): void
+        + add_book(title: str, author_last_name: str, category: str): str
+        + _index_by_category(book: Book): void
+        + _index_by_title_substrings(book: Book): void
+        + _index_by_author_substrings(book: Book): void
+        + search_books(category: str, title: str, author_last_name: str): list(tuple(str, str))
+        + _search_books_by_category(category: str): list(str)
+        + _search_books_by_title(title: str): set(str)
+        + _search_books_by_author(author_last_name: str): set(str)
     }
 
-    class UserInterface {
-        + displayMessage(): void
-        + promptForWashType(): void
-        + promptForCoins(): void
-        + displayRefund(refundAmount: int): void
-        + displayProgress(progress: int, remainingTime: int): void
-        + displayStatistics(totalTimeOn: int, totalEarned: int): void
-    }
-
-    class Maintenance {
-        + resetStatistics(): void
-        + displayStatistics(): void
-    }
-
-    WashingMachine o-- WashType : aggregation
-    WashingMachine -- Coin : association
-    WashingMachine -- UserInterface : association
-    WashingMachine -- Maintenance : association
+    Book -- EnhancedLibrarySystem : aggregation
 ```
 
 ## Run the code
 
 To test the requirements:
+
+```python
+python test_main.py -v
+```
+
+## Foreword
+
+The problem statement is a classic example of a search problem. The problem statement is asking for a system that can search books by category, title (including partial search), and author's last name (including partial search). The system will index the books by category, title substrings, and author's last name substrings. While there is great overhead in indexing the book, the search will be very fast as the lookup will take O(1) time.
